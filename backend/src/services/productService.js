@@ -125,7 +125,6 @@ async function remove(id){
     };
 }
 
-
 module.exports = {
     create,
     getAll,

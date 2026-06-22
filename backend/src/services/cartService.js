@@ -68,7 +68,40 @@ async function getCart(userId){
     }
 }
 
+async function updateQuantity(
+    id,
+    quantity
+) {
+    const cartItem = await prisma.cartItem.findUnique({
+        where: {
+            id: Number(id)
+        }
+    });
+
+    if(!cartItem){
+        return {
+            success: false,
+            message: "Cart item tidak ditemukan!"
+        };
+    }
+
+    const updatedCartItem = await prisma.cartItem.update({
+        where: {
+             id: Number(id) 
+            },
+        data: {
+             quantity 
+            }
+    });
+
+    return {
+        success: true,
+        message: "Quantity sukses diperbarui!",
+        cartItem: updatedCartItem
+    };
+}
 module.exports = {
     addToCart,
-    getCart
+    getCart,
+    updateQuantity
 }

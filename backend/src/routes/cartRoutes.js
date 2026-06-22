@@ -14,4 +14,9 @@ router.get("/",
     cartController.getCart
 );
 
+router.patch("/:id",
+    authMiddleware,
+    cartController.updateQuantity
+);
+
 module.exports = router;

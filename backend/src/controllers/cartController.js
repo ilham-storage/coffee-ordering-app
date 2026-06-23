@@ -60,7 +60,7 @@ async function getCart(req, res){
 
 
 async function updateQuantity(req, res){
-    const { id } = req.params;
+    const { cartItemId } = req.params;
     const { quantity } = req.body;
 
     if(!quantity){
@@ -85,7 +85,7 @@ async function updateQuantity(req, res){
     }
 
     const result = await cartService.updateQuantity(
-        id,
+        cartItemId,
         quantity
     );
     
@@ -94,8 +94,24 @@ async function updateQuantity(req, res){
     }
     res.status(200).json(result);
 }
+
+async function deleteCartItem(req, res){
+    const cartItemId = req.params.id;
+
+    const result = await cartService.deleteCartItem(
+        cartItemId
+    );
+
+    if(!result.success){
+        return res.status(400).json(result);
+    }
+
+    res.status(200).json(result);
+}
+
 module.exports = {
     addToCart,
     getCart,
-    updateQuantity
+    updateQuantity,
+    deleteCartItem
 }

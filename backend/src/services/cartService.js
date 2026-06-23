@@ -69,12 +69,12 @@ async function getCart(userId){
 }
 
 async function updateQuantity(
-    id,
+    cartItemId,
     quantity
 ) {
     const cartItem = await prisma.cartItem.findUnique({
         where: {
-            id: Number(id)
+            id: Number(cartItemId)
         }
     });
 
@@ -87,7 +87,7 @@ async function updateQuantity(
 
     const updatedCartItem = await prisma.cartItem.update({
         where: {
-             id: Number(id) 
+             id: Number(cartItemId) 
             },
         data: {
              quantity 
@@ -100,8 +100,38 @@ async function updateQuantity(
         cartItem: updatedCartItem
     };
 }
+
+async function deleteCartItem (
+    cartItemId
+) {
+    const cartItem = await prisma.cartItem.findUnique({
+        where: {
+            id: Number(cartItemId)
+        }
+    });
+
+    if(!cartItem){
+        return {
+            success: false,
+            message: "Cart item tidak ditemukan!"
+        };
+    }
+
+    const deletedCartItem = await prisma.cartItem.delete({
+        where: {
+            id: Number(cartItemId)
+        }
+    });
+
+    return {
+        success: true,
+        message: "Item removed from cart",
+        cartItem: deletedCartItem
+    };
+}
 module.exports = {
     addToCart,
     getCart,
-    updateQuantity
+    updateQuantity,
+    deleteCartItem
 }

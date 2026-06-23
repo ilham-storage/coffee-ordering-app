@@ -19,4 +19,9 @@ router.patch("/:id",
     cartController.updateQuantity
 );
 
+router.delete("/:id",
+    authMiddleware,
+    cartController.deleteCartItem
+);
+
 module.exports = router;

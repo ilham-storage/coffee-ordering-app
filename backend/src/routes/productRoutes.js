@@ -20,11 +20,6 @@ router.get("/",
 router.get("/:id",
      productController.getById)
 
-router.put("/:id", authMiddleware,
-    adminMiddleware,
-    productController.update
-);
-
 router.delete("/:id", 
     authMiddleware, 
     adminMiddleware, 
@@ -39,6 +34,12 @@ router.post("/",
 router.get("/",
     authMiddleware,
     cartController.getCart
+);
+
+router.patch("/:id",
+    authMiddleware,
+    adminMiddleware,
+    productController.update
 );
 
 module.exports = router;

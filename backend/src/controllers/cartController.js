@@ -60,7 +60,7 @@ async function getCart(req, res){
 
 
 async function updateQuantity(req, res){
-    const { cartItemId } = req.params;
+    const cartItemId = req.params.id;
     const { quantity } = req.body;
 
     if(!quantity){

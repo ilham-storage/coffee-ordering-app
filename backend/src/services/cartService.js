@@ -129,6 +129,60 @@ async function deleteCartItem (
         cartItem: deletedCartItem
     };
 }
+
+async function checkout(userId){
+    const cartItems = await prisma.cartItem.findMany({
+        where: { 
+            userId 
+        },
+        include: {
+            product: true
+        }
+    });
+
+    if(cartItems.length === 0){
+        return {
+            success: false,
+            message: "Keranjang kosong!"
+        };
+    }
+
+    let totalprice = 0;
+    for(let i = 0; i < cartItems.length; i++){
+        totalprice += 
+        cartItems[i].quantity * 
+            cartItems[i].product.price;
+    }
+
+    const order = await prisma.order.create({
+        data: {
+            userId,
+            totalprice,
+            orderItems: {
+                create: cartItems.map(item => ({
+                    productId: item.productId, 
+                    quantity: item.quantity,
+                    price: item.product.price
+                }))
+            }
+        },
+        include: {
+            orderItems: true
+        }
+    });
+
+    await prisma.cartItem.deleteMany({
+        where: {
+            userId
+        }
+    });
+
+    return {
+        success: true,
+        message: "Checkout berhasil!",
+        order
+    };
+}
 module.exports = {
     addToCart,
     getCart,

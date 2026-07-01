@@ -10,4 +10,16 @@ router.post(
     orderController.checkout
 );
 
+router.get("/", 
+    authMiddleware,
+    orderController.getMyOrders
+);
+
+router.get("/:id",
+    authMiddleware,
+    orderController.getMyOrdersById
+);
+
+
+
 module.exports = router;

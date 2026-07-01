@@ -12,6 +12,35 @@ async function checkout(req, res) {
     res.status(400).json(result);
 }
 
+async function getMyOrders(req, res) {
+
+    const userId = req.user.id;
+
+    const result = await orderService.getMyOrders(
+        userId
+    );
+
+    res.status(200).json(result);
+}
+
+async function getMyOrdersById(req, res){
+
+    const userId = req.user.id;
+    const orderId = req.params.id;
+
+    const result = await orderService.getOrderById(
+        userId,
+        orderId
+    );
+
+    if(!result.success) {
+        return res.status(404).json(result);
+    }
+
+    res.status(200).json(result);
+}
 module.exports = {
-    checkout
+    checkout,
+    getMyOrders,
+    getMyOrdersById
 };

@@ -55,23 +55,61 @@ async function checkout(userId) {
     };
 }
 
-// async function getMyOrders(userId) {
-//     const orders = await prisma.order.findMany({
-//         where : {
-//             userId
-//         },
-//         include: {
-//             orderItems: {
-//                 include: {
-//                     product: true
-//                 }
-//             }
-//         }
-//     });
-//     return orders;
-// }
+async function getMyOrders(userId) {
+    const orders = await prisma.order.findMany({
+        where : {
+            userId
+        },
+        include: {
+            orderItems: {
+                include: {
+                    product: true
+                }
+            }
+        }
+    });
+
+    return {
+        success: true,
+        message: "Berhasil mendapatkan pesanan",
+        orders
+    }
+}
+
+async function getOrderById(
+    userId,
+    orderId
+) {
+    const order = await prisma.order.findFirst({
+        where: {
+            id: Number(orderId),
+            userId
+        },
+        include: {
+            orderItems: {
+                include: {
+                    product: true
+                }
+            }
+        }
+    });
+
+    if(!order) {
+        return {
+            success: false,
+            message: "Pesanan tidak ditemukan"
+        };
+    }
+
+    return {
+        success: true,
+        message: "Berhasil mendapatkan pesanan",
+        order
+    };
+}
 
 module.exports = {
     checkout,
-    // getMyOrders
+    getMyOrders,
+    getOrderById
 };

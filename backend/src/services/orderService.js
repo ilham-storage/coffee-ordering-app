@@ -108,8 +108,55 @@ async function getOrderById(
     };
 }
 
+async function updateOrderStatus(
+    orderId,
+    status
+){
+    const order = await prisma.order.findUnique({
+        where: {
+            id: Number(orderId)
+        }
+    });
+
+    if(!order){
+        return {
+            success: false,
+            message: "Pesanan tidak ditemukan!"
+        }
+    }
+
+    const validStatus = [
+        "pending",
+        "diproses",
+        "selesai"
+    ]
+
+    if(!validStatus.includes(status)){
+        return {
+            success: false,
+            message: "Status tidak valid!"
+        }
+    }
+
+    const updateOrder = await prisma.order.update({
+        where: {
+            id: Number(orderId)
+        },
+        data: {
+            status
+        }
+    });
+
+    return {
+        success: true,
+        message: "Status pesanan berhasil diperbarui!",
+        order: updateOrder
+    }
+}
+
 module.exports = {
     checkout,
     getMyOrders,
-    getOrderById
+    getOrderById,
+    updateOrderStatus
 };

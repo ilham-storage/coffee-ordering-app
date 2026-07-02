@@ -114,6 +114,19 @@ async function remove(id){
         };
     }
 
+    const totalOrder = await prisma.orderItem   .count({
+        where: {
+            productId: Number(id)
+        }
+    });
+
+    if(totalOrder > 0){
+        return {
+            success: false,
+            message: "Product tidak dapat dihapus karena masih memiliki pesanan!"
+        };
+    }
+
     const produk = await prisma.product.delete({
         where: {
             id: Number(id)

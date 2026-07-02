@@ -39,8 +39,25 @@ async function getMyOrdersById(req, res){
 
     res.status(200).json(result);
 }
+
+async function updateOrderStatus(req, res) {
+    const orderId = req.params.id;
+    const { status } = req.body;
+
+    const result = await orderService.updateOrderStatus(
+        orderId,
+        status
+    );
+
+    if (!result.success) {
+        return res.status(404).json(result);
+    }   
+    
+    res.status(200).json(result);
+}
 module.exports = {
     checkout,
     getMyOrders,
-    getMyOrdersById
+    getMyOrdersById,
+    updateOrderStatus
 };
